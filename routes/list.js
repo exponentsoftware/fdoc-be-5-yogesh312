@@ -17,7 +17,7 @@ router.delete("/:id", auth, catchErrors(listController.deleteList))
 // router.get("/", auth, verify, catchErrors(listController.getAllByFilter));
 //this route is to get lists according to filters as well as without filters
 //in query pass category/title to find or sort= new/old to find list
-router.get("/user/", auth, catchErrors(listController.getUserList));
+router.get("/user/:userId", auth, catchErrors(listController.getUserList));
 router.get("/all/:id", auth, catchErrors(listController.getAllListAdmin));
 
 module.exports = router;

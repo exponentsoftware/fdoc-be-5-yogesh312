@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+var mongoosePaginate = require('mongoose-paginate');
+
 const listSchema = new mongoose.Schema(
   {
     userId: {
@@ -39,4 +41,5 @@ const listSchema = new mongoose.Schema(
   }
 
 );
+listSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model("List", listSchema);

@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 //const user = require("../models/user");
 const List = mongoose.model("List");
 const User = mongoose.model("User");
+const bodyParser = require("body-parser")
+
+var mongoosePaginate = require('mongoose-paginate');
 
 exports.createList = async (req, res) => {
   const { title,description, track, category} = req.body;
@@ -33,13 +36,21 @@ exports.getAllList = async (req, res) => {
 exports.getAllListAdmin = async (req, res) => {
     try{
         const id=req.params.id;
-        console.log(id);
-        
+        const pageno=req.query.page;
+        const limitno =parseInt(req.query.limit);
+        //console.log(page,limit)
         const user = await User.findById(id);
-        console.log(user);
+        //console.log(user);
         if(user.role=="admin"){
-            const lists = await List.find({});
-            res.json(lists);
+            await List.paginate({},{page:pageno,limit:limitno} ,function(err, result){
+                if(err){
+                    res.json(err)
+                }else{
+                    res.json(result)
+                }
+
+            });
+            
         } else if(user.role=="user"){
             res.json("admin role required")
         }
@@ -59,7 +70,7 @@ exports.getList = async (req, res) => {
 };
 exports.getUserList = async (req, res) => {
     
-    const userId = req.query.userId
+    const userId = req.params.userId
     //console.log(userId)
     let list = await List.find({"userId":userId});
     res.json(list);
